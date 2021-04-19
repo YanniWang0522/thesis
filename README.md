@@ -7,3 +7,6 @@
 
 ## Storm_event_properties.py
 ### calculate Number of rainfall events, Mean evet duration (min), Mean event intensity (mm/hr) for MIT selection
+
+## hydrograph_month_or_week.py
+### automatically draw weekly or monthly hydrographs
