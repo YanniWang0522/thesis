@@ -100,11 +100,11 @@ if __name__ == "__main__":
         for i in range(0,12,1):
             sub_plot("month",i)
 
-            plt.savefig('mygraph' + "_" +intput +str(i) + '.png' , dpi=400)    
+            plt.savefig('hydrograph' + "_" +intput +str(i) + '.png' , dpi=400)    
     
     else:
         for i in range(0,54,1):
             sub_plot("week",i)
 
-            plt.savefig('mygraph' + "_" +intput +str(i) + '.png' , dpi=400)    
+            plt.savefig('hydrograph' + "_" +intput +str(i) + '.png' , dpi=400)    
 
