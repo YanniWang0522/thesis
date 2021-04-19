@@ -90,21 +90,19 @@ def sub_plot(week_or_month, number):
     return fig
 
 if __name__ == "__main__":
-    # month or week
-    intput = "month" 
-    # open the rawdata file 
+    # User edit: month or week
+    week_or_month = "week" 
+    # User edit: open the rawdata file 
     filename= "RG/RG_Rain_Flow_Basin_Apr19_Apr20.csv"
     data = pd.read_csv(filename)  
 
-    if (input == "month"):
+    if week_or_month == 'month':
         for i in range(0,12,1):
             sub_plot("month",i)
-
-            plt.savefig('hydrograph' + "_" +intput +str(i) + '.png' , dpi=400)    
+            plt.savefig('hydrograph' + "_" +week_or_month +str(i) + '.png' , dpi=400)    
     
     else:
         for i in range(0,54,1):
             sub_plot("week",i)
-
-            plt.savefig('hydrograph' + "_" +intput +str(i) + '.png' , dpi=400)    
+            plt.savefig('hydrograph' + "_" +week_or_month +str(i) + '.png' , dpi=400)    
 
