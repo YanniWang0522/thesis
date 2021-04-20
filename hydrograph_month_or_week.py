@@ -11,9 +11,9 @@ def read_csv_file(filename):
 # get the month/week number for DateTime
 def strtodatetime(string, week_or_month):
     if week_or_month == 'month':
-        return(datetime.datetime.strptime(string, "%d/%m/%Y %H:%M")).month
+        return(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")).month
     else:
-        return(datetime.datetime.strptime(string, "%d/%m/%Y %H:%M")).isocalendar()[1]
+        return(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")).isocalendar()[1]
 
 # Create a big array to store the data for each month/week
 def array_in_array(week_or_month, data, key, number):
@@ -64,7 +64,7 @@ def sub_plot(week_or_month, number):
     # x axis to plot both runoff and precip. against
     x = np.linspace(0, len(flow), len(flow))
     ax.plot(x, flow, color="r")
-    ax.set_xlabel('timestep', fontsize=12, color='black')
+    ax.set_xlabel('timestep (6mins)', fontsize=12, color='black')
     ax.set_ylabel('flow(lps)', fontsize=12, color='black')
 
     # set y1 axis range
@@ -81,7 +81,6 @@ def sub_plot(week_or_month, number):
     y2_ticklabels = [str(i) for i in y2_ticks]
     ax2.set_yticks(-1 * y2_ticks)
     ax2.set_yticklabels(y2_ticklabels)
-
     # set y2 axis range
     ax2.set_yticks([0, -20, -40, -60, -80, -100, -120])
     ax2.set_yticklabels([str(i) for i in range(0,130,20)])
@@ -89,20 +88,61 @@ def sub_plot(week_or_month, number):
 
     return fig
 
+def shade(dry_or_wet):
+
+    period_dry_start = {"value" : dry_or_wet[0], "index" : 0}
+
+    for i in range(1, len(dry_or_wet)):
+        # print(i)
+        if dry_or_wet[i]- dry_or_wet[i-1] == 1:
+            period_dry_end = i-1
+
+            # print(str(period_dry_start["index"]) + " " + str(period_dry_end))
+            plt.axvspan(period_dry_start["index"], period_dry_end, color='grey', alpha=0.5)
+
+        elif dry_or_wet[i]- dry_or_wet[i-1] == -1:
+            # print(" line 103")
+            period_dry_start["value"] = dry_or_wet[i]
+            period_dry_start["index"] = i
+
+
+
+    if (dry_or_wet[len(dry_or_wet)-1] == 0):
+        plt.axvspan(period_dry_start["index"], len(dry_or_wet), color='grey', alpha=0.5)
+
+    return shade
+
+
 if __name__ == "__main__":
     # User edit: month or week
-    week_or_month = "week" 
+    week_or_month = "month" 
     # User edit: open the rawdata file 
-    filename= "RG/RG_Rain_Flow_Basin_Apr19_Apr20.csv"
+    filename= "RG_Dry_or_wet_Rain_Flow.csv"
     data = pd.read_csv(filename)  
 
+    # sub_plot("month",1)
+
+    # data_shade = np.array(array_in_array(week_or_month,data,"dry_or_wet",1)["y_axis"])
+    # print(len(data_shade))
+    # print(data_shade)
+    # shade(data_shade)
+
+    # plt.show()
+        # plt.axvspan(0, 1000, color='green', alpha=0.5)
+
+    # plt.show()   
+    
     if week_or_month == 'month':
         for i in range(0,12,1):
             sub_plot("month",i)
+            data_shade = np.array(array_in_array(week_or_month,data,"dry_or_wet",i)["y_axis"])
+            shade(data_shade)
             plt.savefig('hydrograph' + "_" +week_or_month +str(i) + '.png' , dpi=400)    
     
     else:
         for i in range(0,54,1):
             sub_plot("week",i)
+            data_shade = np.array(array_in_array(week_or_month,data,"dry_or_wet",i)["y_axis"])
+            shade(data_shade)
             plt.savefig('hydrograph' + "_" +week_or_month +str(i) + '.png' , dpi=400)    
 
