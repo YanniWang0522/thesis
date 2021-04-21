@@ -5,7 +5,7 @@
 
 ## Average_daily_flow_weekday.py
 #### input: output from Dry_wet_weather_extractor_behzad.py
-#### output average daily flow chart for catchments based on weekday, weekends, all
+#### output: average daily flow chart for catchments based on weekday, weekends, all
 
 ## Storm_event_properties.py
 #### input: wet from Dry_wet_weather_extractor_behzad.py
