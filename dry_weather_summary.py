@@ -32,45 +32,26 @@ def seperate_event(data, step):
             small_buff_time = {"DateTime":[], "Flow":[], "Rain": []}
     return big_buff_time
 
-def convert_to_csv(data):
-    csv_data = {}
-    inital = 1 
-    for element in data: 
-        if (inital == 1):
-            csv_data = element
-            csv_data["Event"] = []
-        csv_data["Event"] += [inital for i in range(0,len(element["DateTime"]))]
-        for key in element.keys():
-            csv_data[key] += element[key]
-        inital += 1
-    pd.DataFrame(csv_data).to_csv('RG_Dry_Weather_Heatmont.csv', index=True)
+def summary_table(data_s):
 
-    return csv_data
+    csv_data = {"Dry Weather event" : [], "Start":[], "End" : [], "Length(min)": [], "Total Flow" :[]}
+    count = 1
 
-# def summary_table(data_s):
+    for i in data_s:
+        csv_data["Start"].append(i["DateTime"][0])    
+        csv_data["End"].append(i["DateTime"][len(i["DateTime"]) - 1])
+        csv_data["Length(min)"].append( (len(i["DateTime"]) - 1) * 6)
+        csv_data["Total Flow"].append(round(sum(i["Flow"]) - 1, 2))
+        csv_data["Dry Weather event"].append(count)
 
-#     csv_data = {"Dry Weather event" : [], "Start":[], "End" : [], "Length(min)": [], "Total Flow" :[]}
-#     count = 1
+        count += 1
 
-#     for i in data_s:
-#         csv_data["Start"].append(i["DateTime"][0])    
-#         csv_data["End"].append(i["DateTime"][len(i["DateTime"]) - 1])
-#         csv_data["Length(min)"].append( (len(i["DateTime"]) - 1) * 6)
-#         csv_data["Total Flow"].append(round(sum(i["Flow"]) - 1, 2))
-#         csv_data["Dry Weather event"].append(count)
-
-#         count += 1
-
-#     pd.DataFrame(csv_data).to_csv('RG_Dry_Weather_Heatmont_summary.csv', index=False)
-
+    pd.DataFrame(csv_data).to_csv('RG_Dry_Weather_Heatmont_summary.csv', index=False)
 
 if __name__ == "__main__":
     filename= "RG/RG_Rain_Flow_Heathmont_Apr19_Apr20_dry.csv"
     data = pd.read_csv(filename) 
-
+    
     step = 360
     dry_array = seperate_event(data, step)
-    csv_data = convert_to_csv(dry_array)
-
-    # dry_array = seperate_event(data, step)
-    # summary_table(dry_array)
+    summary_table(dry_array)
